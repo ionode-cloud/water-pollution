@@ -230,5 +230,5 @@ app.delete('/api/rivers', async (req, res) => {
 // Start server
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`River API running on http://localhost:${PORT}`);
+  console.log(`River running on http://localhost:${PORT}`);
 });
