@@ -1,0 +1,10 @@
+{
+    "version": 2,
+  "name": "water-pollution-frontend",
+  "builds": [
+    { "src": "Water-Polution.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/Water-Polution.html" }
+  ]
+}
