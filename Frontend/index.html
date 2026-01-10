@@ -471,7 +471,8 @@ async function loadRivers() {
             </div>
         `;
 
-        const response = await fetch(API_URL);
+        // ✅ Use correct API URL
+        const response = await fetch(`${API_BASE}/rivers`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -503,11 +504,12 @@ async function loadRivers() {
             <div class="error">
                 <strong>⚠️ Error loading rivers</strong><br>
                 ${err.message}<br>
-                <small>Make sure the backend server is running on ${API_URL}</small>
+                <small>Make sure the backend server is running on ${API_BASE}/rivers</small>
             </div>
         `;
     }
 }
+
 
 // Render the list of rivers
 function renderRiverList(rivers) {
