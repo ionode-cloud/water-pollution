@@ -472,7 +472,7 @@ async function loadRivers() {
         `;
 
         // ✅ Use correct API URL
-        const response = await fetch(`${API_BASE}/rivers`);
+       const response = await fetch(`${API_BASE}/rivers`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
