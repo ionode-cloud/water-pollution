@@ -18,7 +18,12 @@ app.use(express.json());
 
 // CORS (ONLY frontend allowed)
 app.use(cors({
-  origin: "https://waterpollution.ionode.cloud",
+  origin: [
+    "https://waterpollution.ionode.cloud", 
+    "http://127.0.0.1:5500", 
+    "http://localhost:5500",
+    "null"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
