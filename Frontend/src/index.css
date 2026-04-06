@@ -1,0 +1,456 @@
+@import "leaflet/dist/leaflet.css";
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #1f2933;
+    color: #1f2933;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+#root {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.app {
+    width: 100%;
+    background: #f9fafb;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 16px 50px rgba(15, 23, 42, 0.4);
+}
+
+.hero {
+    position: relative;
+    height: 170px;
+    background-image: linear-gradient(120deg, #0369a1, #059669);
+    padding: 20px 26px;
+    color: #e0f2f1;
+}
+
+.hero-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.hero-sub {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    max-width: 520px;
+    color: #e0f2f1;
+    opacity: 0.95;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 0;
+}
+
+/* Left: River list */
+.river-panel {
+    border-right: 1px solid #e2e8f0;
+    background: #f1f5f9;
+    padding: 16px 14px 18px;
+}
+
+.panel-title {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #64748b;
+    margin-bottom: 16px;
+}
+
+.river-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 360px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.river-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s, background 0.12s;
+}
+
+.river-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    border-color: #0ea5e9;
+}
+
+.river-card.active {
+    border-color: #0ea5e9;
+    background: linear-gradient(135deg, #eff6ff, #ecfeff);
+}
+
+/* River chip */
+.river-chip {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background-color: rgb(53, 53, 116);
+    color: #ffffff;
+}
+
+.river-chip.mahanadi {
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+}
+
+.river-chip.chitrotpala {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.river-chip.kathajodi {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.river-chip.acceptableriver,
+.river-chip.yamunariver,
+.river-chip.gangariver {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.river-info {
+    flex: 1;
+}
+
+.river-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #0f172a;
+}
+
+.river-location {
+    font-size: 0.78rem;
+    color: #475569;
+    margin-top: 2px;
+}
+
+.coords {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 3px;
+}
+
+/* Right: Details */
+.details {
+    padding: 16px 18px 18px;
+    background: #ffffff;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.status-good {
+    background: rgba(46, 125, 50, 0.12);
+    color: #2e7d32;
+    border: 1px solid rgba(46, 125, 50, 0.5);
+}
+
+.status-bad {
+    background: rgba(211, 47, 47, 0.12);
+    color: #c62828;
+    border: 1px solid rgba(211, 47, 47, 0.5);
+}
+
+.status-unknown {
+    background: rgba(148, 163, 184, 0.15);
+    color: #475569;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.section-title {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.details-river-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.details-small {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* Main Content Grid Layout */
+.main-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+/* Large Prediction Card - Left Side */
+.prediction-card-large {
+    grid-row: 1 / 3;
+    position: relative;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+    border-radius: 16px;
+    padding: 20px;
+    border: 2px solid #7c3aed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 280px;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
+}
+
+.prediction-card-large .prediction-title {
+    text-align: center;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #e0e7ff;
+    font-weight: 600;
+    margin-bottom: 35px;
+}
+
+.prediction-card-large .prediction-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.4;
+    text-align: center;
+}
+
+/* Small Parameter Cards - Right Side (2x2 grid) */
+.params-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.param-card {
+    position: relative;
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid #e2e8f0;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.param-label {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.param-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-top: 8px;
+    color: #0f172a;
+}
+
+.flag-bad {
+    color: #ea580c;
+}
+
+.param-icon {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 1.2rem;
+    opacity: 0.7;
+}
+
+.param-unit {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+/* Additional params section */
+.additional-params {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.additional-params .param-card {
+    min-height: 90px;
+}
+
+.additional-params .param-value {
+    font-size: 1.3rem;
+}
+
+.info {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 10px;
+    line-height: 1.4;
+}
+
+.issues-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 12px;
+}
+
+.issues-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #991b1b;
+    margin-bottom: 6px;
+}
+
+.issues-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.issues-list li {
+    font-size: 0.75rem;
+    color: #b91c1c;
+    padding: 4px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.issues-list li:before {
+    content: "⚠️";
+    position: absolute;
+    left: 0;
+    font-size: 0.7rem;
+}
+
+/* Loading State */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.spinner {
+    border: 3px solid #e2e8f0;
+    border-top: 3px solid #0ea5e9;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Error State */
+.error {
+    background: #fef2f2;
+    color: #991b1b;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #fecaca;
+    font-size: 0.85rem;
+}
+
+@media(max-width:880px) {
+    .content {
+        grid-template-columns: 1fr;
+    }
+
+    .river-panel {
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .main-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .prediction-card-large {
+        grid-row: auto;
+    }
+
+    .additional-params {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:640px) {
+    .hero {
+        height: auto;
+        padding: 14px 16px 18px;
+    }
+
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .content {
+        grid-template-columns: 1fr;
+    }
+
+    .params-grid {
+        grid-template-columns: 1fr;
+    }
+}
